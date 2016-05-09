@@ -51,6 +51,7 @@ class Tpl
   end
 
   def getoption(opt)
+    puts "getoption:#{opt} "
     rc = nil
     config = getconfig if config.nil?
     if config
@@ -79,7 +80,9 @@ class Tpl
   private
 
   def write_orgmode_file
-    f = open(File.expand_path(getoption('org_agenda_file'), 'w')
+    orgfile = getoption('org_agenda_file')
+    expanded = File.expand_path( orgfile)
+    f = open( expanded, 'w' )
     @xbooksdue.create_orgmode_entrys(f, 'checkouts due')
     @xreadyforpickup.create_orgmode_entrys(f, 'ready for pickup')
     f.close
