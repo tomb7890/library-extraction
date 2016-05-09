@@ -79,7 +79,7 @@ class Tpl
   private
 
   def write_orgmode_file
-    f = open(File.expand_path('~/Documents/todo/tpl.org'), 'w')
+    f = open(File.expand_path(getoption('org_agenda_file'), 'w')
     @xbooksdue.create_orgmode_entrys(f, 'checkouts due')
     @xreadyforpickup.create_orgmode_entrys(f, 'ready for pickup')
     f.close

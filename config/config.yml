@@ -1,0 +1,11 @@
+# Library-Exraction
+
+
+# Replace the tpl_username variable with whatever your Toronto Public Library account number is.
+tpl_username: 'USERNAME'
+
+# Replace the tpl_password with whatever your Toronto Public Library password or PIN is.
+tpl_password: 'PASSWORD'
+
+# Set the name and location of where you want Emacs to look for the generated TPL information.
+org_agenda_file: '~/Documents/tpl.org'
