@@ -51,7 +51,6 @@ class Tpl
   end
 
   def getoption(opt)
-    puts "getoption:#{opt} "
     rc = nil
     config = getconfig if config.nil?
     if config
