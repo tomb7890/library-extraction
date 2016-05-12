@@ -27,7 +27,7 @@ class Tpl
 
   def total_checked_out_items
     html = local_html
-    rows = @doc.checkedoutbooks(html)
+    rows = @doc.checked_out_books(html)
     rows.size
   end
 
@@ -70,7 +70,7 @@ class Tpl
     rows.each do |x|
       @xreadyforpickup.process_tr(x)
     end
-    rows = @doc.checkedoutbooks(html)
+    rows = @doc.checked_out_books(html)
     rows.each do |x|
       @xbooksdue.process_tr(x)
     end
@@ -80,8 +80,8 @@ class Tpl
 
   def write_orgmode_file
     orgfile = getoption('org_agenda_file')
-    expanded = File.expand_path( orgfile)
-    f = open( expanded, 'w' )
+    expanded = File.expand_path(orgfile)
+    f = open(expanded, 'w')
     @xbooksdue.create_orgmode_entrys(f, 'checkouts due')
     @xreadyforpickup.create_orgmode_entrys(f, 'ready for pickup')
     f.close
