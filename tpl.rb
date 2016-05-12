@@ -118,10 +118,10 @@ class Tpl
 
   def local_html
     f = open(@cachefile, 'r')
-    stuff = f.read
-    stuff = strip_html(stuff)
+    html = f.read
+    html = strip_html(html)
     f.close
-    stuff
+    html
   end
 end
 
