@@ -1,16 +1,12 @@
 # !/usr/bin/ruby -w
 require 'yaml'
 require 'mechanize'
-require 'logger'
 require_relative './document'
 
 class Tpl
   attr_accessor :cachefile, :doc
 
   def readyforpickup_titles(htmlfile)
-    # main
-    f = open(htmlfile, 'r').read
-    parse(f)
     @xreadyforpickup.alltitles
   end
 
@@ -26,15 +22,11 @@ class Tpl
   end
 
   def total_checked_out_items
-    html = local_html
-    rows = @doc.checked_out_books(html)
-    rows.size
+    @xbooksdue.total_items
   end
 
   def num_items_available_for_pickup
-    html = local_html
-    rows = @doc.ready_for_pickup(html)
-    rows.size
+    @xreadyforpickup.total_items
   end
 
   def main
@@ -66,14 +58,18 @@ class Tpl
   end
 
   def parse(html)
-    rows = @doc.ready_for_pickup(html)
-    rows.each do |x|
-      @xreadyforpickup.process_tr(x)
-    end
-    rows = @doc.checked_out_books(html)
-    rows.each do |x|
-      @xbooksdue.process_tr(x)
-    end
+    # @# doc = Document.new(html)
+    # @doc.
+    @doc.checked_out_books(html, @xbooksdue)
+    @doc.ready_for_pickup(html, @xreadyforpickup)
+  end
+
+  def local_html
+    f = open(@cachefile, 'r')
+    html = f.read
+    html = strip_html(html)
+    f.close
+    html
   end
 
   private
@@ -100,6 +96,7 @@ class Tpl
     password_field.value = getoption('tpl_password')
   end
 
+
   def remote_html
     agent = Mechanize.new
     agent.log = Logger.new 'mechanize.log'
@@ -116,13 +113,6 @@ class Tpl
     str.gsub(z, '')
   end
 
-  def local_html
-    f = open(@cachefile, 'r')
-    html = f.read
-    html = strip_html(html)
-    f.close
-    html
-  end
 end
 
 # The Xhash class is a wrapper for a Hash used to store dates and
@@ -141,6 +131,25 @@ class Xhash
     all
   end
 
+  def size
+    @hash.size
+  end
+
+  def dump
+    @hash.each do |k,v|
+      puts "element: #{k}, #{v}"
+    end
+  end
+
+  def total_items
+    total = 0
+    @hash.each do |k,v|
+      list = v
+      total = total + v.size
+    end
+    total
+  end
+
   def create_orgmode_entrys(f, actiontype)
     @hash.each do |key, value|
       items = value
@@ -152,18 +161,15 @@ class Xhash
     end
   end
 
-  def process_tr(tr)
-    paragraph = tr.to_s
-    datestring = Document.find_date_string(paragraph)
-    if datestring
-      mediatitle = Document.find_media_title(paragraph)
-      if mediatitle
-        encode_into_hash(datestring, mediatitle)
-      end
+  def encode_into_hash(datestring, mediatitle)
+    if @hash.key?(datestring)
+      list = @hash[datestring]
+    else
+      list = []
     end
+    list << format_media_title(mediatitle)
+    @hash[datestring] = list
   end
-
-  private
 
   def assemble_book_list(items, entry)
     items.each do |l|
@@ -178,16 +184,6 @@ class Xhash
 
   def append_unordered_list_element(l)
     " - #{l}\n"
-  end
-
-  def encode_into_hash(datestring, mediatitle)
-    if @hash.key?(datestring)
-      list = @hash[datestring]
-    else
-      list = []
-    end
-    list << format_media_title(mediatitle)
-    @hash[datestring] = list
   end
 
   def format_media_title(mediatitle)

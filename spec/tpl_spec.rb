@@ -1,10 +1,10 @@
 require_relative '../tpl'
 
 describe 'tests' do
-
   before(:all) do
     @tpl = Tpl.new
     @tpl.cachefile = 'spec/data/cache-13-april-2016.html'
+    @tpl.parse(@tpl.local_html)
   end
 
   it 'correctly finds items for pickup' do
