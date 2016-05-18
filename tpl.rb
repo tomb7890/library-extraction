@@ -58,8 +58,6 @@ class Tpl
   end
 
   def parse(html)
-    # @# doc = Document.new(html)
-    # @doc.
     @doc.checked_out_books(html, @xbooksdue)
     @doc.ready_for_pickup(html, @xreadyforpickup)
   end
