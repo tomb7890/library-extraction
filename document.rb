@@ -1,6 +1,7 @@
 require 'nokogiri'
 
-# the TPL page creates a table of stuff of interest in rows with IDs
+# The Document class encapsulates knowledge about extracting details of interest
+# from the library website.
 class Document
   def make_ndoc(html)
     Nokogiri::HTML(html)
@@ -13,7 +14,7 @@ class Document
 
   def in_transit(html, hash)
     query = "//tbody[@id='tblIntr']/tr"
-    noko_query(query, html)
+    noko_query(query, html, hash)
   end
 
   def checked_out_books(html, hash)
@@ -22,10 +23,10 @@ class Document
   end
 
   def noko_query(query, html, hash)
-     nokodoc = make_ndoc(html)
+    nokodoc = make_ndoc(html)
     rows = nokodoc.xpath(query)
     rows.each do |row|
-      process_row(row,hash)
+      process_row(row, hash)
     end
   end
 
@@ -49,7 +50,7 @@ class Document
   def find_media_title(text)
     if text =~ %r{a href=.*detail.*>(.*)<\/a>}
       if text.size > 0
-        mediatitle = $1.strip
+        $1.strip
       end
     end
   end
