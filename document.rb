@@ -3,25 +3,20 @@ require 'nokogiri'
 # the TPL page creates a table of stuff of interest in rows with IDs
 class Document
   def make_ndoc(html)
-    # create an object model of the html document
-    # for later XPath querying
     Nokogiri::HTML(html)
   end
 
   def ready_for_pickup(html, hash)
-    # Query for all the rows that contain content about ready for pickup.
     query = "//tbody[@id='tblAvail']/tr"
     noko_query(query, html, hash)
   end
 
   def in_transit(html, hash)
-    # Query for all the rows that contain content about in transit
     query = "//tbody[@id='tblIntr']/tr"
     noko_query(query, html)
   end
 
   def checked_out_books(html, hash)
-    # Query for all the rows that contain content about in transit
     query = "//tbody[@id='renewcharge']/tr"
     noko_query(query, html, hash)
   end
