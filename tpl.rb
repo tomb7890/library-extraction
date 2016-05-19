@@ -187,5 +187,4 @@ class Xhash
   def format_media_title(mediatitle)
     "#{mediatitle}"
   end
-
 end
