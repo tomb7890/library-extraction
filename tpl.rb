@@ -97,7 +97,6 @@ class Tpl
     password_field.value = getoption('tpl_password')
   end
 
-
   def remote_html
     agent = Mechanize.new
     agent.log = Logger.new 'mechanize.log'
@@ -113,7 +112,6 @@ class Tpl
     z = Nokogiri::HTML('&nbsp;').text
     str.gsub(z, '')
   end
-
 end
 
 # The Xhash class is a wrapper for a Hash used to store dates and
