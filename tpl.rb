@@ -143,7 +143,6 @@ class Xhash
   def total_items
     total = 0
     @hash.each do |k,v|
-      list = v
       total = total + v.size
     end
     total
