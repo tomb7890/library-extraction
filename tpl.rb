@@ -5,7 +5,7 @@ require_relative './document'
 class Tpl
   attr_accessor :cachefile, :doc
 
-  def readyforpickup_titles(htmlfile)
+  def readyforpickup_titles
     @xreadyforpickup.alltitles
   end
 
@@ -69,12 +69,16 @@ class Tpl
     html
   end
 
+  def orgmode_filename
+    orgfile = getoption('org_agenda_file')
+    File.expand_path(orgfile)
+  end
+
   private
 
   def write_orgmode_file
-    orgfile = getoption('org_agenda_file')
-    expanded = File.expand_path(orgfile)
-    f = open(expanded, 'w')
+    orgfile = orgmode_filename
+    f = open(orgfile, 'w')
     @xbooksdue.create_orgmode_entrys(f, 'checkouts due')
     @xreadyforpickup.create_orgmode_entrys(f, 'ready for pickup')
     f.close

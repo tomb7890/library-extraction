@@ -21,6 +21,6 @@ describe 'tests' do
   end
 
   it 'correctly finds a known ready title' do
-    expect(@tpl.readyforpickup_titles(@tpl.cachefile) ).to eq([['Gangs of New York [videorecording]']])
+    expect(@tpl.readyforpickup_titles).to eq([['Gangs of New York [videorecording]']])
   end
 end
