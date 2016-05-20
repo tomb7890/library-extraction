@@ -7,7 +7,7 @@ Library-Extraction is a utility written in Ruby to insert account information fr
 Setting the TPL website username and password into the config/config.yml file as variables tpl_username and tpl_password.  In Emacs you will need to include the full path of the output file in your org-agenda-files list. The output file name may be modified if one prefers something other than ~/Documents/tpl.org by changing the  variable org_agenda_file.
 
 #### REQUIREMENTS
-Ruby, rake, and the installed gems nokogiri, and yaml.
+Ruby, rake, and the installed gems nokogiri, mechanize, and yaml.
 
 #### USAGE
 Run `rake'.
