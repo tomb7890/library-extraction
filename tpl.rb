@@ -135,14 +135,14 @@ class Xhash
   end
 
   def dump
-    @hash.each do |k,v|
+    @hash.each do |k, v|
       puts "element: #{k}, #{v}"
     end
   end
 
   def total_items
     total = 0
-    @hash.each do |k,v|
+    @hash.each do |k, v|
       total = total + v.size
     end
     total
