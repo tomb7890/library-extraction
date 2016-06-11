@@ -115,7 +115,3 @@ class Tpl
     str.gsub(z, '')
   end
 end
-
-# The Xhash class is a wrapper for a Hash used to store dates and
-# actions gathered from the TPL website, and then used as input for creation of
-# the Emacs Org Mode file.

@@ -1,3 +1,6 @@
+# This class is a wrapper for a Hash used to store dates and actions
+# gathered from the TPL website, used as input for creation
+# of an Emacs Org Mode file.
 class Xhash
   attr_reader :hash
 
