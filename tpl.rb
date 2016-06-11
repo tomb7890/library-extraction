@@ -1,9 +1,11 @@
 require 'yaml'
 require 'mechanize'
 require_relative './document'
+require_relative './orgfilewriter'
+require_relative './xhash'
 
 class Tpl
-  attr_accessor :cachefile, :doc
+  attr_accessor :cachefile, :doc, :xreadyforpickup
 
   def readyforpickup_titles
     @xreadyforpickup.alltitles
@@ -29,7 +31,7 @@ class Tpl
   end
 
   def main
-    parse_and_write(local_html)
+    parse_and_write(remote_html)
   end
 
   def refresh
@@ -74,15 +76,15 @@ class Tpl
     File.expand_path(orgfile)
   end
 
-  private
-
-  def write_orgmode_file
-    orgfile = orgmode_filename
-    f = open(orgfile, 'w')
-    @xbooksdue.create_orgmode_entrys(f, 'checkouts due')
-    @xreadyforpickup.create_orgmode_entrys(f, 'ready for pickup')
-    f.close
+  def write_orgmode_file(orgfile = orgmode_filename)
+    File.open(orgfile, 'w') do |f|
+      ofw = OrgfileWriter.new(f)
+      ofw.create_entrys(@xbooksdue, 'checkouts due')
+      ofw.create_entrys(@xreadyforpickup, 'ready for pickup')
+    end
   end
+
+  private
 
   def cache(page)
     f = open(@cachefile, 'w')
@@ -117,74 +119,3 @@ end
 # The Xhash class is a wrapper for a Hash used to store dates and
 # actions gathered from the TPL website, and then used as input for creation of
 # the Emacs Org Mode file.
-class Xhash
-  def initialize
-    @hash = {}
-  end
-
-  def alltitles
-    all = []
-    @hash.each do |_k, v|
-      all << v
-    end
-    all
-  end
-
-  def size
-    @hash.size
-  end
-
-  def dump
-    @hash.each do |k, v|
-      puts "element: #{k}, #{v}"
-    end
-  end
-
-  def total_items
-    total = 0
-    @hash.each do |k, v|
-      total = total + v.size
-    end
-    total
-  end
-
-  def create_orgmode_entrys(f, actiontype)
-    @hash.each do |key, value|
-      items = value
-      datestring = key
-      orgmode_entry_header = '*** TODO TPL'
-      entry = "#{orgmode_entry_header} #{actiontype}\nDEADLINE: #{datestring}\n"
-      entry = assemble_book_list(items, entry)
-      f.write(entry)
-    end
-  end
-
-  def encode_into_hash(datestring, mediatitle)
-    if @hash.key?(datestring)
-      list = @hash[datestring]
-    else
-      list = []
-    end
-    list << format_media_title(mediatitle)
-    @hash[datestring] = list
-  end
-
-  def assemble_book_list(items, entry)
-    items.each do |l|
-      entry += append_unordered_list_element(l)
-    end
-    entry
-  end
-
-  def append_checkbox_item(l)
-    " - [ ] #{l}\n"
-  end
-
-  def append_unordered_list_element(l)
-    " - #{l}\n"
-  end
-
-  def format_media_title(mediatitle)
-    "#{mediatitle}"
-  end
-end
