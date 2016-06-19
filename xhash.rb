@@ -5,7 +5,7 @@ class Xhash
   attr_reader :hash
 
   def initialize
-    @hash = {}
+    @hash = Hash.new { |h, k| h[k] = []  }
   end
 
   def alltitles
@@ -35,12 +35,6 @@ class Xhash
   end
 
   def encode_into_hash(datestring, mediatitle)
-    if @hash.key?(datestring)
-      list = @hash[datestring]
-    else
-      list = []
-    end
-    list << mediatitle
-    @hash[datestring] = list
+    @hash[datestring]  << mediatitle
   end
 end
