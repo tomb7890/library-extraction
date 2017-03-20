@@ -103,7 +103,8 @@ class Tpl
     agent = Mechanize.new
     agent.log = Logger.new 'mechanize.log'
     login_page = agent.get 'https://www.torontopubliclibrary.ca/youraccount'
-    login_form = login_page.form_with(action: 'https://www.torontopubliclibrary.ca:443/signin')
+    a = 'https://www.torontopubliclibrary.ca:443/signin?target=%2Fyouraccount'
+    login_form = login_page.form_with(action: a)
     prepare_login_form(login_form)
     home_page = login_form.submit
     cache(home_page)
