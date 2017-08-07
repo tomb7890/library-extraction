@@ -79,6 +79,7 @@ class Tpl
   def write_orgmode_file(orgfile = orgmode_filename)
     File.open(orgfile, 'w') do |f|
       ofw = OrgfileWriter.new(f)
+      ofw.write_header()
       ofw.create_entrys(@xbooksdue, 'checkouts due')
       ofw.create_entrys(@xreadyforpickup, 'ready for pickup')
     end
