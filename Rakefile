@@ -1,12 +1,8 @@
 require_relative 'tpl'
 
-begin
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new(:spec)
-  task :default => :spec
-  task :test => :spec
-end
+task :default => :refresh 
 
+desc "Retrieve TPL account info and write to Org Mode agenda file"  
 task :refresh do
   t = Tpl.new
   t.refresh
