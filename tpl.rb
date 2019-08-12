@@ -30,10 +30,6 @@ class Tpl
     @xreadyforpickup.total_items
   end
 
-  def main
-    parse_and_write(remote_html)
-  end
-
   def refresh
     parse_and_write(remote_html)
   end
